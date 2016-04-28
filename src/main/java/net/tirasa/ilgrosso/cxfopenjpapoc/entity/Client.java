@@ -290,7 +290,7 @@ public class Client implements Serializable {
      *
      * @return the resource owner user subject
      */
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     public UserSubject getResourceOwnerSubject() {
         return resourceOwnerSubject;
     }

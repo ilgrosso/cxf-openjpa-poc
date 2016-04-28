@@ -28,8 +28,8 @@ public class JPAOAuthDataProvider implements OAuthDataProvider {
     }
 
     @Override
-    public void setClient(Client client) {
-        entityManager.merge(client);
+    public Client setClient(Client client) {
+        return entityManager.merge(client);
     }
 
     @Override

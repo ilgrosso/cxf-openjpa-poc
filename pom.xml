@@ -7,6 +7,7 @@
   <packaging>jar</packaging>
   <properties>
     <openjpa.version>2.4.1</openjpa.version>
+    <cxf.version>3.1.6</cxf.version>
     <spring.version>4.2.5.RELEASE</spring.version>
     <slf4j.version>1.7.21</slf4j.version>
     <h2.version>1.4.190</h2.version>
@@ -40,6 +41,17 @@
       <version>${openjpa.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-core</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-security</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>

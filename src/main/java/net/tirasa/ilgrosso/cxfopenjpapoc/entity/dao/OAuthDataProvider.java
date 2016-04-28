@@ -9,7 +9,7 @@ public interface OAuthDataProvider {
 
     Client getClient(String clientId);
 
-    void setClient(Client client);
+    Client setClient(Client client);
 
     Client removeClient(String clientId);
 }

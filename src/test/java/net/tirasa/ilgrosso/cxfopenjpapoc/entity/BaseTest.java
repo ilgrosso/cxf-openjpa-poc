@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collections;
+import javax.persistence.EntityManager;
 import net.tirasa.ilgrosso.cxfopenjpapoc.entity.dao.OAuthDataProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,16 +24,26 @@ public class BaseTest {
     private static final Logger LOG = LoggerFactory.getLogger(BaseTest.class);
 
     @Autowired
+    private EntityManager entityManager;
+
+    @Autowired
     private OAuthDataProvider provider;
 
-    private Client addClient(String clientId, String userLogin) {
+    private Client addClient(String clientId, UserSubject resourceOwnerSubject) {
         Client c = new Client();
         c.setRedirectUris(Collections.singletonList("http://client/redirect"));
         c.setClientId(clientId);
         c.setClientSecret("123");
-        c.setResourceOwnerSubject(new UserSubject(userLogin));
-        provider.setClient(c);
-        return c;
+        c.setResourceOwnerSubject(resourceOwnerSubject);
+        return provider.setClient(c);
+    }
+
+    private Client addClient(String clientId, String userLogin) {
+        // resource owner must pre-exist
+        UserSubject resourceOwnerSubject = new UserSubject(userLogin);
+        resourceOwnerSubject = entityManager.merge(resourceOwnerSubject);
+
+        return addClient(clientId, resourceOwnerSubject);
     }
 
     private void compareClients(Client c, Client c2) {
@@ -58,6 +69,25 @@ public class BaseTest {
         provider.removeClient(c.getClientId());
         Client c3 = provider.getClient(c.getClientId());
         assertNull(c3);
+    }
+
+    @Test
+    public void fediz() {
+        UserSubject resourceOwnerSubject = new UserSubject("another");
+        resourceOwnerSubject = entityManager.merge(resourceOwnerSubject);
+
+        Client c1 = addClient("Client1", resourceOwnerSubject);
+        assertNotNull(c1);
+        Client c2 = addClient("Client2", resourceOwnerSubject);
+        assertNotNull(c2);
+
+        BearerAccessToken at = new BearerAccessToken();
+        at.setClient(c2);
+        at = entityManager.merge(at);
+        assertNotNull(at);
+
+        provider.removeClient(c1.getClientId());
+        provider.removeClient(c2.getClientId());
     }
 
 }
