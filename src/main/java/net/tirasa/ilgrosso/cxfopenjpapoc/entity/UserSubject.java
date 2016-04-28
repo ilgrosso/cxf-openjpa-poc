@@ -6,10 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MapKeyColumn;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -68,7 +65,6 @@ public class UserSubject implements Serializable {
      *
      * @return the login name
      */
-    @Id
     public String getLogin() {
         return login;
     }
@@ -88,7 +84,6 @@ public class UserSubject implements Serializable {
      *
      * @return the list of roles
      */
-    @ElementCollection
     public List<String> getRoles() {
         return roles;
     }
@@ -108,8 +103,6 @@ public class UserSubject implements Serializable {
      *
      * @return the list of properties
      */
-    @ElementCollection
-    @MapKeyColumn(name = "name")
     public Map<String, String> getProperties() {
         return properties;
     }
